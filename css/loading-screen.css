@@ -1,0 +1,232 @@
+:root {
+  --black: #000000;
+  --surface: #050505;
+  --surface-raised: #0a0a0a;
+  --border-subtle: #1f1f1f;
+  --border: #2a2a2a;
+  --border-strong: #525252;
+  --text: #ffffff;
+  --text-strong: #e5e5e5;
+  --text-muted: #a3a3a3;
+  --text-dim: #737373;
+  --font-mono: "JetBrains Mono", Consolas, Monaco, "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+body.booting {
+  overflow: hidden;
+}
+
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--black);
+  transition: opacity 420ms ease-out, visibility 420ms ease-out;
+}
+
+.boot-screen.is-complete {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.boot-frame {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: min(1120px, calc(100vw - 32px));
+  min-height: min(720px, calc(100dvh - 32px));
+  margin: auto;
+  border: 1px solid var(--border);
+  background: var(--black);
+}
+
+.boot-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.ascii-cpu {
+  align-self: center;
+  justify-self: center;
+  width: min-content;
+  max-width: calc(100vw - 56px);
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-strong);
+  font: 400 clamp(8px, 1.25vw, 14px) / 1.08 var(--font-mono);
+  white-space: pre;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: color 220ms ease-out, opacity 260ms ease-out, transform 260ms ease-out;
+}
+
+.ascii-cpu.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ascii-cpu.is-refreshing {
+  color: var(--text-dim);
+}
+
+.boot-console {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface);
+}
+
+.boot-console__title {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.boot-log {
+  display: grid;
+  gap: 5px;
+  min-height: 152px;
+  color: var(--text-strong);
+  font-size: clamp(12px, 2vw, 15px);
+  line-height: 1.35;
+}
+
+.boot-line {
+  min-height: 1.35em;
+  color: var(--text-strong);
+}
+
+.boot-line::before {
+  content: "> ";
+  color: var(--text-muted);
+}
+
+.boot-cursor::after {
+  content: "_";
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--text);
+  animation: cursorBlink 620ms step-end infinite;
+}
+
+.boot-access {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid var(--text);
+  padding: 8px 10px;
+  background: var(--text);
+  color: var(--black);
+  font-size: clamp(13px, 2.2vw, 16px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.boot-access.is-visible {
+  animation: accessIn 260ms ease-out forwards;
+}
+
+.site-shell {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  background: var(--black);
+  opacity: 0;
+  transition: opacity 420ms ease-out;
+}
+
+.site-shell.is-visible {
+  opacity: 1;
+}
+
+.site-shell__placeholder {
+  border: 1px solid var(--border-strong);
+  padding: 12px 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+@keyframes cursorBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes accessIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 700px) {
+  .boot-frame {
+    width: calc(100vw - 20px);
+    min-height: calc(100dvh - 20px);
+  }
+
+  .boot-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    font-size: 10px;
+  }
+
+  .ascii-cpu {
+    max-width: calc(100vw - 36px);
+    font-size: clamp(6px, 1.9vw, 9px);
+  }
+
+  .boot-console {
+    padding: 12px;
+  }
+
+  .boot-log {
+    min-height: 132px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen,
+  .site-shell,
+  .ascii-cpu,
+  .boot-access,
+  .boot-cursor::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}

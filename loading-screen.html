@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CPU Scheduling Visualizer | Boot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/loading-screen.css" />
+  </head>
+  <body class="booting">
+    <section class="boot-screen" id="bootScreen" aria-label="Loading CPU Scheduling Visualizer">
+      <div class="boot-frame">
+        <header class="boot-header" aria-hidden="true">
+          <span>CPU_SCHEDULER_VISUALIZER</span>
+          <span id="bootStage">POWER_INIT</span>
+        </header>
+
+        <pre class="ascii-cpu" id="asciiCpu" aria-label="ASCII CPU silhouette"></pre>
+
+        <div class="boot-console" aria-live="polite">
+          <div class="boot-console__title">[SYSTEM BOOT]</div>
+          <div class="boot-log" id="bootLog"></div>
+          <div class="boot-access" id="bootAccess" aria-hidden="true">ACCESS GRANTED</div>
+        </div>
+      </div>
+    </section>
+
+    <main class="site-shell" id="siteShell" aria-hidden="true">
+      <div class="site-shell__placeholder">CPU Scheduling Visualizer</div>
+    </main>
+
+    <script type="module" src="js/loading/loading-screen.js"></script>
+  </body>
+</html>

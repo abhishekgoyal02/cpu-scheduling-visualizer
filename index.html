@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CPU Scheduling Visualizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/loading-screen.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+  </head>
+  <body class="booting">
+    <section class="boot-screen" id="bootScreen" aria-label="Loading CPU Scheduling Visualizer">
+      <div class="boot-frame">
+        <header class="boot-header" aria-hidden="true">
+          <span>CPU_SCHEDULER_VISUALIZER</span>
+          <span id="bootStage">POWER_INIT</span>
+        </header>
+
+        <pre class="ascii-cpu" id="asciiCpu" aria-label="ASCII CPU silhouette"></pre>
+
+        <div class="boot-console" aria-live="polite">
+          <div class="boot-console__title">[SYSTEM BOOT]</div>
+          <div class="boot-log" id="bootLog"></div>
+          <div class="boot-access" id="bootAccess" aria-hidden="true">ACCESS GRANTED</div>
+        </div>
+      </div>
+    </section>
+
+    <header class="topbar">
+      <div class="topbar__brand">CPU_SCHEDULER_VISUALIZER</div>
+      <nav class="topbar__nav" aria-label="Primary navigation">
+        <a href="#intro">Theory</a>
+        <a href="#algorithms">Algorithms</a>
+        <a href="#process-input">Input</a>
+        <a href="#workspace">Workspace</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero section" aria-labelledby="hero-title">
+        <div class="hero__content">
+          <p class="eyebrow">[CPU LAB / SCHEDULING MODE]</p>
+          <h1 id="hero-title">CPU Scheduling Visualizer</h1>
+          <p class="hero__subtitle">
+            A terminal-inspired dashboard for studying process scheduling, ready queues,
+            Gantt timelines, and algorithm performance.
+          </p>
+          <div class="hero__actions" aria-label="Primary actions">
+            <button class="button button--primary" type="button">Start Simulation</button>
+            <button class="button button--secondary" type="button">Generate Random Processes</button>
+          </div>
+        </div>
+        <aside class="hero__status" aria-label="System status">
+          <div>STATUS: IDLE</div>
+          <div>MODE: MANUAL_INPUT</div>
+          <div>ALGORITHM: NOT_SELECTED</div>
+          <div>CLOCK: 00:00</div>
+        </aside>
+      </section>
+
+      <section class="section intro" id="intro" aria-labelledby="intro-title">
+        <div class="section-heading">
+          <p class="eyebrow">[EDUCATION]</p>
+          <h2 id="intro-title">CPU Scheduling Introduction</h2>
+        </div>
+        <p>
+          CPU scheduling decides which ready process receives processor time next. It
+          affects waiting time, response time, throughput, and fairness. This visualizer
+          compares classic scheduling strategies by showing process input, ready queue
+          movement, execution order, timing metrics, and algorithm tradeoffs in a
+          compact operating-system dashboard.
+        </p>
+      </section>
+
+      <section class="section" id="algorithms" aria-labelledby="algorithms-title">
+        <div class="section-heading">
+          <p class="eyebrow">[ALGORITHM REFERENCE]</p>
+          <h2 id="algorithms-title">Algorithm Cards</h2>
+        </div>
+
+        <div class="algorithm-grid">
+          <article class="panel algorithm-card">
+            <header class="panel__header">[FCFS]</header>
+            <div class="panel__body">
+              <p><strong>Definition:</strong> Executes processes in arrival order.</p>
+              <p><strong>Formula:</strong> WT = TAT - BT, TAT = CT - AT.</p>
+              <p><strong>Advantages:</strong> Simple, predictable, easy to implement.</p>
+              <p><strong>Disadvantages:</strong> Can cause convoy effect and poor average wait.</p>
+            </div>
+          </article>
+
+          <article class="panel algorithm-card">
+            <header class="panel__header">[SJF]</header>
+            <div class="panel__body">
+              <p><strong>Definition:</strong> Selects the arrived process with shortest burst time.</p>
+              <p><strong>Formula:</strong> Minimum BT among ready processes.</p>
+              <p><strong>Advantages:</strong> Often minimizes average waiting time.</p>
+              <p><strong>Disadvantages:</strong> Requires burst prediction and may starve long jobs.</p>
+            </div>
+          </article>
+
+          <article class="panel algorithm-card">
+            <header class="panel__header">[SRTF]</header>
+            <div class="panel__body">
+              <p><strong>Definition:</strong> Preemptive SJF using shortest remaining time.</p>
+              <p><strong>Formula:</strong> Minimum remaining BT at each decision point.</p>
+              <p><strong>Advantages:</strong> Strong response for short processes.</p>
+              <p><strong>Disadvantages:</strong> More context switches and possible starvation.</p>
+            </div>
+          </article>
+
+          <article class="panel algorithm-card">
+            <header class="panel__header">[PRIORITY SCHEDULING]</header>
+            <div class="panel__body">
+              <p><strong>Definition:</strong> Executes processes based on priority level.</p>
+              <p><strong>Formula:</strong> Select minimum priority value as highest priority.</p>
+              <p><strong>Advantages:</strong> Handles critical tasks before less important work.</p>
+              <p><strong>Disadvantages:</strong> Low-priority processes can starve without aging.</p>
+            </div>
+          </article>
+
+          <article class="panel algorithm-card">
+            <header class="panel__header">[ROUND ROBIN]</header>
+            <div class="panel__body">
+              <p><strong>Definition:</strong> Rotates ready processes using a fixed time quantum.</p>
+              <p><strong>Formula:</strong> Execute min(remaining BT, quantum).</p>
+              <p><strong>Advantages:</strong> Fair, responsive, useful for time-sharing systems.</p>
+              <p><strong>Disadvantages:</strong> Quantum choice strongly affects performance.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section input-workspace" id="process-input" aria-labelledby="input-title">
+        <div class="section-heading">
+          <p class="eyebrow">[PROCESS CONTROL]</p>
+          <h2 id="input-title">Process Input Area</h2>
+        </div>
+
+        <div class="panel process-panel">
+          <header class="panel__header">[PROCESS INPUT]</header>
+          <div class="panel__body">
+            <form class="process-form" aria-label="Process input form">
+              <label>
+                <span>Process ID</span>
+                <input type="text" name="process-id" placeholder="P1" />
+              </label>
+              <label>
+                <span>Arrival Time</span>
+                <input type="number" name="arrival-time" placeholder="0" min="0" />
+              </label>
+              <label>
+                <span>Burst Time</span>
+                <input type="number" name="burst-time" placeholder="5" min="1" />
+              </label>
+              <label>
+                <span>Priority</span>
+                <input type="number" name="priority" placeholder="1" min="1" />
+              </label>
+            </form>
+
+            <div class="button-row" aria-label="Process actions">
+              <button class="button button--primary" type="button">Add Process</button>
+              <button class="button button--secondary" type="button">Remove Process</button>
+              <button class="button button--ghost" type="button">Clear</button>
+              <button class="button button--secondary" type="button">Generate Random Processes</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="workspace" aria-labelledby="workspace-title">
+        <div class="section-heading">
+          <p class="eyebrow">[SIMULATION WORKSPACE]</p>
+          <h2 id="workspace-title">Simulation Workspace Placeholders</h2>
+        </div>
+
+        <div class="workspace-grid">
+          <section class="panel placeholder-panel" aria-labelledby="ready-queue-title">
+            <header class="panel__header" id="ready-queue-title">[READY QUEUE]</header>
+            <div class="panel__body placeholder-box">Awaiting process data</div>
+          </section>
+
+          <section class="panel placeholder-panel placeholder-panel--wide" aria-labelledby="gantt-title">
+            <header class="panel__header" id="gantt-title">[GANTT CHART]</header>
+            <div class="panel__body placeholder-box">Timeline output container</div>
+          </section>
+
+          <section class="panel placeholder-panel" aria-labelledby="metrics-title">
+            <header class="panel__header" id="metrics-title">[METRICS DASHBOARD]</header>
+            <div class="panel__body placeholder-box">WT / TAT / RT / CPU utilization</div>
+          </section>
+
+          <section class="panel placeholder-panel" aria-labelledby="comparison-title">
+            <header class="panel__header" id="comparison-title">[COMPARISON VIEW]</header>
+            <div class="panel__body placeholder-box">Algorithm comparison container</div>
+          </section>
+
+          <section class="panel placeholder-panel placeholder-panel--wide" aria-labelledby="charts-title">
+            <header class="panel__header" id="charts-title">[CHARTS]</header>
+            <div class="panel__body placeholder-box">Chart rendering area</div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>CPU Scheduling Visualizer / Portfolio Project</div>
+      <a href="#" aria-label="GitHub repository placeholder">GitHub Repository</a>
+    </footer>
+    <script type="module" src="js/loading/loading-screen.js"></script>
+  </body>
+</html>
