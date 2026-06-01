@@ -210,6 +210,21 @@ input:focus {
   border-color: var(--white);
 }
 
+.process-message {
+  min-height: 20px;
+  margin-top: 14px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.process-message[data-tone="error"] {
+  color: var(--white);
+}
+
+.process-message[data-tone="success"] {
+  color: var(--text-strong);
+}
+
 .button {
   min-height: 40px;
   border: 1px solid var(--border-strong);
@@ -249,6 +264,53 @@ input:focus {
   color: var(--black);
 }
 
+.process-table-shell {
+  margin-top: 18px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  background: var(--black);
+}
+
+.process-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-strong);
+  font-size: 12px;
+}
+
+.process-table th,
+.process-table td {
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.process-table th {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.process-table tbody tr {
+  cursor: pointer;
+}
+
+.process-table tbody tr:hover,
+.process-table tbody tr[aria-selected="true"] {
+  background: var(--hover);
+  color: var(--white);
+}
+
+.process-table tbody tr:focus {
+  outline: 1px solid var(--white);
+  outline-offset: -1px;
+}
+
+.process-table__empty {
+  color: var(--text-dim);
+  text-align: center;
+}
+
 .workspace-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -268,6 +330,174 @@ input:focus {
   color: var(--text-dim);
   font-size: 13px;
   text-align: center;
+}
+
+.visualization-box {
+  display: block;
+  place-items: initial;
+  width: 100%;
+  overflow-x: auto;
+  text-align: left;
+}
+
+.visualization-empty {
+  display: grid;
+  min-height: 120px;
+  place-items: center;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.simulation-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.speed-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.speed-control[data-active="true"] {
+  border-color: var(--white);
+  color: var(--white);
+}
+
+.gantt-chart {
+  min-width: 520px;
+}
+
+.gantt-track {
+  display: flex;
+  min-height: 74px;
+  border: 1px solid var(--border-strong);
+  background: var(--black);
+}
+
+.gantt-block {
+  display: grid;
+  min-width: 56px;
+  place-items: center;
+  border-right: 1px solid var(--border-strong);
+  background: var(--black);
+  color: var(--text-dim);
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.22;
+  transform: scaleY(0.82);
+  transition: opacity 180ms ease-out, transform 180ms ease-out, background 180ms ease-out;
+}
+
+.gantt-block:last-child {
+  border-right: 0;
+}
+
+.gantt-block[data-visible="true"] {
+  color: var(--white);
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.gantt-block[data-active="true"] {
+  background: var(--hover);
+  box-shadow: inset 0 0 0 1px var(--white);
+}
+
+.gantt-timestamps {
+  position: relative;
+  height: 30px;
+  margin-top: 8px;
+}
+
+.gantt-timestamp {
+  position: absolute;
+  top: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  transform: translateX(-50%);
+}
+
+.gantt-timestamp:first-child {
+  transform: translateX(0);
+}
+
+.gantt-timestamp:last-child {
+  transform: translateX(-100%);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric-card {
+  border: 1px solid var(--border);
+  background: var(--black);
+  padding: 12px;
+}
+
+.metric-card__label {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.metric-card__value {
+  margin-top: 7px;
+  color: var(--white);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.results-table-shell {
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  color: var(--text-strong);
+  font-size: 12px;
+}
+
+.results-table th,
+.results-table td {
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.results-table th {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.ready-queue {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ready-queue__item {
+  border: 1px solid var(--border-strong);
+  background: var(--black);
+  color: var(--text-strong);
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ready-queue__item[data-active="true"] {
+  border-color: var(--white);
+  background: var(--hover);
+  color: var(--white);
 }
 
 .footer {
@@ -300,6 +530,7 @@ input:focus {
 
   .algorithm-grid,
   .process-form,
+  .metrics-grid,
   .workspace-grid {
     grid-template-columns: 1fr;
   }

@@ -145,10 +145,10 @@
         <div class="panel process-panel">
           <header class="panel__header">[PROCESS INPUT]</header>
           <div class="panel__body">
-            <form class="process-form" aria-label="Process input form">
+            <form class="process-form" id="processForm" aria-label="Process input form" novalidate>
               <label>
                 <span>Process ID</span>
-                <input type="text" name="process-id" placeholder="P1" />
+                <input type="text" name="process-id" placeholder="P1" autocomplete="off" />
               </label>
               <label>
                 <span>Arrival Time</span>
@@ -164,11 +164,31 @@
               </label>
             </form>
 
+            <div class="process-message" id="processMessage" role="status" aria-live="polite"></div>
+
             <div class="button-row" aria-label="Process actions">
-              <button class="button button--primary" type="button">Add Process</button>
-              <button class="button button--secondary" type="button">Remove Process</button>
-              <button class="button button--ghost" type="button">Clear</button>
-              <button class="button button--secondary" type="button">Generate Random Processes</button>
+              <button class="button button--primary" id="addProcessButton" type="submit" form="processForm">Add Process</button>
+              <button class="button button--secondary" id="deleteSelectedProcessButton" type="button">Delete Selected Process</button>
+              <button class="button button--ghost" id="clearProcessesButton" type="button">Clear All Processes</button>
+              <button class="button button--secondary" id="generateRandomProcessesButton" type="button">Generate Random Processes</button>
+            </div>
+
+            <div class="process-table-shell" aria-label="Process table">
+              <table class="process-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Process ID</th>
+                    <th scope="col">Arrival Time</th>
+                    <th scope="col">Burst Time</th>
+                    <th scope="col">Priority</th>
+                  </tr>
+                </thead>
+                <tbody id="processTableBody">
+                  <tr>
+                    <td colspan="4" class="process-table__empty">No processes loaded</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -214,5 +234,7 @@
       <a href="#" aria-label="GitHub repository placeholder">GitHub Repository</a>
     </footer>
     <script type="module" src="js/loading/loading-screen.js"></script>
+    <script type="module" src="js/process/process-controller.js"></script>
+    <script type="module" src="js/scheduling/scheduling-controller.js"></script>
   </body>
 </html>
