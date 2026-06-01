@@ -1,10 +1,14 @@
 import { processStore } from "../process/process-store.js";
-import { runFcfs } from "./algorithms/fcfs.js";
+import { createSchedulerController } from "./controller/scheduler-controller.js";
 import { renderScheduleResult, renderSimulationSnapshot } from "./rendering/scheduling-renderer.js";
-import { scheduleStore } from "./schedule-store.js";
+import { renderComparison } from "./rendering/comparison-renderer.js";
+import { renderSchedulingControlPanel } from "./rendering/control-panel-renderer.js";
+import { schedulerStateStore } from "./state/scheduler-state-store.js";
+import { createSimulationController } from "./simulation/simulation-controller.js";
 import { createSimulationEngine } from "./simulation/simulation-engine.js";
 
 const startButton = document.querySelector(".hero__actions .button--primary");
+const controlCenter = document.querySelector("#schedulerControlCenter");
 const statusLines = document.querySelectorAll(".hero__status div");
 const workspaceBoxes = document.querySelectorAll(".placeholder-box");
 
@@ -16,10 +20,16 @@ const elements = {
   gantt: workspaceBoxes[1],
   metrics: workspaceBoxes[2],
   results: workspaceBoxes[3],
+  comparison: workspaceBoxes[4],
 };
 
 const simulationEngine = createSimulationEngine();
-let processStateSignature = JSON.stringify(processStore.getState().processes);
+const simulationController = createSimulationController(simulationEngine, schedulerStateStore);
+const schedulerController = createSchedulerController({
+  processStore,
+  schedulerStateStore,
+  simulationController,
+});
 
 function setText(element, text) {
   if (element) {
@@ -27,41 +37,54 @@ function setText(element, text) {
   }
 }
 
-function runFcfsSchedule() {
-  const processes = processStore.getSchedulingInput();
-
-  if (processes.length === 0) {
+function runSimulation() {
+  if (processStore.getState().processes.length === 0) {
     setText(elements.gantt, "No process data available");
+    schedulerStateStore.setMessage("Process data is required before running a simulation.");
     return;
   }
 
-  const result = runFcfs(processes);
-  scheduleStore.setResult(result);
-  simulationEngine.reset(result.timeline);
-  simulationEngine.play();
+  schedulerController.runSelectedAlgorithm();
 }
 
 if (startButton) {
-  startButton.addEventListener("click", runFcfsSchedule);
+  startButton.addEventListener("click", runSimulation);
 }
 
-scheduleStore.subscribe((state) =>
-  renderScheduleResult(state.result, elements, simulationEngine.getSnapshot(), simulationEngine),
-);
-simulationEngine.subscribe((snapshot) =>
-  renderSimulationSnapshot(snapshot, elements, scheduleStore.getState().result, simulationEngine),
-);
-processStore.subscribe((state) => {
-  const nextSignature = JSON.stringify(state.processes);
+processStore.subscribe(() => schedulerController.synchronizeProcessData());
 
-  if (nextSignature === processStateSignature) {
-    return;
+schedulerStateStore.subscribe((state) => {
+  if (controlCenter) {
+    renderSchedulingControlPanel(controlCenter, state, {
+      selectAlgorithm: schedulerStateStore.selectAlgorithm,
+      updateSetting: schedulerStateStore.updateAlgorithmSetting,
+      runSimulation,
+      pauseSimulation: schedulerController.pauseSimulation,
+      resumeSimulation: schedulerController.resumeSimulation,
+      resetSimulation: schedulerController.resetSimulation,
+      setSpeed: schedulerController.setSimulationSpeed,
+      compareAllAlgorithms: schedulerController.compareAllAlgorithms,
+    });
   }
 
-  processStateSignature = nextSignature;
-  scheduleStore.reset();
-  simulationEngine.reset([]);
+  renderScheduleResult(
+    state.schedulingResult,
+    elements,
+    state.simulation.snapshot ?? simulationEngine.getSnapshot(),
+    simulationEngine,
+  );
+  renderComparison(elements.comparison, state.comparisonResult);
 });
 
-window.schedulerScheduleStore = scheduleStore;
+simulationEngine.subscribe((snapshot) =>
+  renderSimulationSnapshot(
+    snapshot,
+    elements,
+    schedulerStateStore.getState().schedulingResult,
+    simulationEngine,
+  ),
+);
+
+window.schedulerStateStore = schedulerStateStore;
+window.schedulerController = schedulerController;
 window.schedulerSimulationEngine = simulationEngine;

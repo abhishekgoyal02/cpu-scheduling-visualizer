@@ -49,7 +49,7 @@ export function createSimulationEngine() {
   }
 
   function play() {
-    if (timeline.length === 0 || state === "playing") {
+    if (timeline.length === 0 || state === "running") {
       return;
     }
 
@@ -57,7 +57,7 @@ export function createSimulationEngine() {
       currentIndex = 0;
     }
 
-    state = "playing";
+    state = "running";
     notify();
     stopTimer();
     timerId = window.setInterval(step, BASE_TICK_MS / speed);
@@ -65,7 +65,7 @@ export function createSimulationEngine() {
   }
 
   function pause() {
-    if (state !== "playing") {
+    if (state !== "running") {
       return;
     }
 
@@ -91,7 +91,7 @@ export function createSimulationEngine() {
 
     speed = normalizedSpeed;
 
-    if (state === "playing") {
+    if (state === "running") {
       stopTimer();
       timerId = window.setInterval(step, BASE_TICK_MS / speed);
     }

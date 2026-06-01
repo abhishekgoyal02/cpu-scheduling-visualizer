@@ -12,35 +12,7 @@ function createEmptyState(message) {
   return createElement("div", "visualization-empty", message);
 }
 
-function createControls(engine) {
-  const controls = createElement("div", "simulation-controls");
-  const playButton = createElement("button", "button button--primary", "Play");
-  const pauseButton = createElement("button", "button button--secondary", "Pause");
-  const resetButton = createElement("button", "button button--ghost", "Reset");
-  const speedGroup = createElement("div", "speed-controls");
-
-  playButton.type = "button";
-  pauseButton.type = "button";
-  resetButton.type = "button";
-
-  playButton.addEventListener("click", () => engine.play());
-  pauseButton.addEventListener("click", () => engine.pause());
-  resetButton.addEventListener("click", () => engine.reset());
-
-  engine.allowedSpeeds.forEach((speed) => {
-    const speedButton = createElement("button", "button button--ghost speed-control", `${speed}x`);
-    speedButton.type = "button";
-    speedButton.dataset.speed = String(speed);
-    speedButton.dataset.active = String(engine.getSnapshot().speed === speed);
-    speedButton.addEventListener("click", () => engine.setSpeed(speed));
-    speedGroup.append(speedButton);
-  });
-
-  controls.append(playButton, pauseButton, resetButton, speedGroup);
-  return controls;
-}
-
-export function renderGanttChart(container, result, snapshot, engine) {
+export function renderGanttChart(container, result, snapshot) {
   clearElement(container);
   container.classList.add("visualization-box", "gantt-visualization");
 
@@ -58,20 +30,32 @@ export function renderGanttChart(container, result, snapshot, engine) {
     ? `${snapshot.activeEvent.pid}-${snapshot.activeEvent.start}-${snapshot.activeEvent.end}`
     : "";
 
+  track.dataset.cursorTime = "0";
+
   result.timeline.forEach((event) => {
     const eventKey = `${event.pid}-${event.start}-${event.end}`;
-    const width = totalTime === 0 ? 0 : ((event.end - event.start) / totalTime) * 100;
+    const duration = event.end - event.start;
+    const width = totalTime === 0 ? 0 : (duration / totalTime) * 100;
     const block = createElement("div", "gantt-block", event.pid);
     const startStamp = createElement("span", "gantt-timestamp", String(event.start));
 
+    if (event.start > track.dataset.cursorTime) {
+      const idleDuration = event.start - Number(track.dataset.cursorTime);
+      const idleBlock = createElement("div", "gantt-idle-block", "");
+      idleBlock.style.flexBasis = `${totalTime === 0 ? 0 : (idleDuration / totalTime) * 100}%`;
+      idleBlock.style.flexGrow = String(idleDuration);
+      track.append(idleBlock);
+    }
+
     block.style.flexBasis = `${width}%`;
-    block.style.flexGrow = String(event.end - event.start);
+    block.style.flexGrow = String(duration);
     block.dataset.visible = String(revealedIds.has(eventKey));
     block.dataset.active = String(eventKey === activeKey);
 
     startStamp.style.left = `${totalTime === 0 ? 0 : (event.start / totalTime) * 100}%`;
     track.append(block);
     timestamps.append(startStamp);
+    track.dataset.cursorTime = String(event.end);
   });
 
   const finalStamp = createElement("span", "gantt-timestamp", String(totalTime));
@@ -79,5 +63,5 @@ export function renderGanttChart(container, result, snapshot, engine) {
   timestamps.append(finalStamp);
 
   chart.append(track, timestamps);
-  container.append(createControls(engine), chart);
+  container.append(chart);
 }

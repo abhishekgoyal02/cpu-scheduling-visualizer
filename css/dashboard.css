@@ -226,6 +226,9 @@ input:focus {
 }
 
 .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 40px;
   border: 1px solid var(--border-strong);
   border-radius: 0;
@@ -395,6 +398,12 @@ input:focus {
   border-right: 0;
 }
 
+.gantt-idle-block {
+  min-width: 24px;
+  border-right: 1px dashed var(--border);
+  background: var(--black);
+}
+
 .gantt-block[data-visible="true"] {
   color: var(--white);
   opacity: 1;
@@ -456,27 +465,126 @@ input:focus {
 
 .results-table-shell {
   overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.table-section-title {
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 10px;
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .results-table {
   width: 100%;
   min-width: 760px;
   border-collapse: collapse;
+  border: 1px solid var(--border-strong);
   color: var(--text-strong);
   font-size: 12px;
+  table-layout: fixed;
 }
 
 .results-table th,
 .results-table td {
-  border-bottom: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   padding: 10px 12px;
   text-align: left;
   white-space: nowrap;
 }
 
+.results-table th:last-child,
+.results-table td:last-child {
+  border-right: 0;
+}
+
+.results-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
 .results-table th {
+  background: var(--black);
   color: var(--white);
   font-weight: 700;
+}
+
+.results-table td:not(:first-child),
+.results-table th:not(:first-child) {
+  text-align: right;
+}
+
+.comparison-output {
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.comparison-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  border: 1px solid var(--border-strong);
+  color: var(--text-strong);
+  font-size: 12px;
+  table-layout: fixed;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.comparison-table th:last-child,
+.comparison-table td:last-child {
+  border-right: 0;
+}
+
+.comparison-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.comparison-table th {
+  background: var(--black);
+  color: var(--white);
+  font-weight: 700;
+}
+
+.comparison-table td:not(:first-child),
+.comparison-table th:not(:first-child) {
+  text-align: right;
+}
+
+.comparison-table td[data-best="true"] {
+  background: var(--hover);
+  color: var(--white);
+  font-weight: 700;
+}
+
+.comparison-summary {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  background: var(--black);
+  padding: 12px;
+}
+
+.comparison-summary__line {
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.comparison-summary__note {
+  color: var(--text-muted);
+  font-size: 12px;
 }
 
 .ready-queue {
@@ -498,6 +606,83 @@ input:focus {
   border-color: var(--white);
   background: var(--hover);
   color: var(--white);
+}
+
+.scheduler-control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 14px;
+}
+
+.scheduler-control-panel--wide {
+  grid-column: 1 / -1;
+}
+
+.scheduler-algorithm-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.scheduler-control-row,
+.scheduler-speed-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.scheduler-control-row {
+  margin-bottom: 18px;
+}
+
+.scheduler-speed-row {
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.scheduler-control-row .button {
+  flex: 1 1 170px;
+  min-width: 150px;
+}
+
+.scheduler-speed-row .button {
+  flex: 0 1 76px;
+  min-width: 64px;
+}
+
+.scheduler-algorithm-button {
+  flex: 1 1 160px;
+  min-width: 140px;
+}
+
+.scheduler-algorithm-button[data-selected="true"] {
+  border-color: var(--white);
+  background: var(--hover);
+  color: var(--white);
+}
+
+.scheduler-config-panel {
+  display: grid;
+  gap: 12px;
+  min-height: 96px;
+}
+
+.scheduler-config-placeholder,
+.scheduler-control-message {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.scheduler-control-message {
+  margin-top: 14px;
+  min-height: 20px;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
 }
 
 .footer {
@@ -531,11 +716,16 @@ input:focus {
   .algorithm-grid,
   .process-form,
   .metrics-grid,
+  .scheduler-control-grid,
   .workspace-grid {
     grid-template-columns: 1fr;
   }
 
   .placeholder-panel--wide {
+    grid-column: auto;
+  }
+
+  .scheduler-control-panel--wide {
     grid-column: auto;
   }
 }
@@ -561,6 +751,13 @@ input:focus {
   .button,
   .hero__actions,
   .button-row {
+    width: 100%;
+  }
+
+  .scheduler-control-row .button,
+  .scheduler-speed-row .button,
+  .scheduler-algorithm-button {
+    flex-basis: 100%;
     width: 100%;
   }
 

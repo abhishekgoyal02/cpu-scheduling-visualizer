@@ -9,8 +9,9 @@ export function renderReadyQueue(container, result, snapshot) {
     return;
   }
 
-  const revealedPids = new Set(snapshot.revealedEvents.map((event) => event.pid));
-  const queue = result.timeline.filter((event) => !revealedPids.has(event.pid));
+  const eventKey = (event) => `${event.pid}-${event.start}-${event.end}`;
+  const revealedEvents = new Set(snapshot.revealedEvents.map((event) => eventKey(event)));
+  const queue = result.timeline.filter((event) => !revealedEvents.has(eventKey(event)));
 
   if (queue.length === 0) {
     container.append(createElement("div", "visualization-empty", "Ready queue empty"));
@@ -19,7 +20,7 @@ export function renderReadyQueue(container, result, snapshot) {
 
   queue.forEach((event) => {
     const item = createElement("div", "ready-queue__item", event.pid);
-    item.dataset.active = String(snapshot.activeEvent?.pid === event.pid);
+    item.dataset.active = String(snapshot.activeEvent && eventKey(snapshot.activeEvent) === eventKey(event));
     container.append(item);
   });
 }

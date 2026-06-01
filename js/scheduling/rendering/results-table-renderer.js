@@ -10,15 +10,16 @@ const RESULT_COLUMNS = [
   ["responseTime", "Response Time"],
 ];
 
-export function renderResultsTable(container, processes) {
+export function renderResultsTable(container, result) {
   clearElement(container);
   container.classList.add("visualization-box", "results-table-shell");
 
-  if (!processes || processes.length === 0) {
+  if (!result?.processes || result.processes.length === 0) {
     container.append(createElement("div", "visualization-empty", "Algorithm comparison container"));
     return;
   }
 
+  const title = createElement("div", "table-section-title", `${result.algorithm} Scheduling Results`);
   const table = createElement("table", "results-table");
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
@@ -31,7 +32,7 @@ export function renderResultsTable(container, processes) {
     headerRow.append(th);
   });
 
-  processes.forEach((process) => {
+  result.processes.forEach((process) => {
     const row = document.createElement("tr");
 
     RESULT_COLUMNS.forEach(([key]) => {
@@ -45,5 +46,5 @@ export function renderResultsTable(container, processes) {
 
   thead.append(headerRow);
   table.append(thead, tbody);
-  container.append(table);
+  container.append(title, table);
 }

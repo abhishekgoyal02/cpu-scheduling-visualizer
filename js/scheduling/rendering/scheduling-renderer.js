@@ -16,7 +16,7 @@ export function renderScheduleResult(result, elements, snapshot, simulationEngin
   renderReadyQueue(elements.readyQueue, result, snapshot);
   renderGanttChart(elements.gantt, result, snapshot, simulationEngine);
   renderMetricsDashboard(elements.metrics, result?.metrics ?? null);
-  renderResultsTable(elements.results, result?.processes ?? []);
+  renderResultsTable(elements.results, result);
 }
 
 export function renderSimulationSnapshot(snapshot, elements, result, simulationEngine) {
@@ -29,7 +29,7 @@ export function renderSimulationSnapshot(snapshot, elements, result, simulationE
   }
 
   setText(elements.status, `STATUS: ${snapshot.state.toUpperCase()}`);
-  setText(elements.algorithm, "ALGORITHM: FCFS");
+  setText(elements.algorithm, `ALGORITHM: ${result?.algorithm ?? "NOT_SELECTED"}`);
   setText(elements.clock, `CLOCK: ${formatClock(snapshot.revealedEvents.at(-1))}`);
   renderReadyQueue(elements.readyQueue, result, snapshot);
   renderGanttChart(elements.gantt, result, snapshot, simulationEngine);
