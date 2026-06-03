@@ -587,6 +587,66 @@ input:focus {
   font-size: 12px;
 }
 
+.analytics-panel {
+  overflow-x: auto;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.analytics-graph {
+  min-width: 320px;
+  border: 1px solid var(--border);
+  background: var(--black);
+  padding: 12px;
+}
+
+.analytics-graph__title {
+  margin-bottom: 10px;
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.analytics-graph__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border-subtle);
+  background: var(--black);
+}
+
+.analytics-graph__axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.analytics-graph__line {
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.analytics-graph__label {
+  fill: var(--text-muted);
+  font: 11px var(--font-mono);
+}
+
+.analytics-status {
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  background: var(--black);
+  padding: 10px 12px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
 .ready-queue {
   display: flex;
   flex-wrap: wrap;
@@ -783,6 +843,7 @@ input:focus {
   .algorithm-grid,
   .process-form,
   .metrics-grid,
+  .analytics-grid,
   .scheduler-control-grid,
   .workspace-grid {
     grid-template-columns: 1fr;

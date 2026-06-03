@@ -1,4 +1,5 @@
 import { processStore } from "../process/process-store.js";
+import { createAnalyticsController } from "./analytics/analytics-controller.js";
 import { createSchedulerController } from "./controller/scheduler-controller.js";
 import { renderScheduleResult, renderSimulationSnapshot } from "./rendering/scheduling-renderer.js";
 import { renderComparison } from "./rendering/comparison-renderer.js";
@@ -24,12 +25,14 @@ const elements = {
 };
 
 const simulationEngine = createSimulationEngine();
+const analyticsController = createAnalyticsController(elements.comparison);
 const simulationController = createSimulationController(simulationEngine, schedulerStateStore);
 const schedulerController = createSchedulerController({
   processStore,
   schedulerStateStore,
   simulationController,
 });
+let analyticsResult = null;
 
 function setText(element, text) {
   if (element) {
@@ -74,16 +77,22 @@ schedulerStateStore.subscribe((state) => {
     simulationEngine,
   );
   renderComparison(elements.comparison, state.comparisonResult);
+
+  if (state.schedulingResult !== analyticsResult) {
+    analyticsResult = state.schedulingResult;
+    analyticsController.setResult(state.schedulingResult);
+  }
 });
 
-simulationEngine.subscribe((snapshot) =>
+simulationEngine.subscribe((snapshot) => {
   renderSimulationSnapshot(
     snapshot,
     elements,
     schedulerStateStore.getState().schedulingResult,
     simulationEngine,
-  ),
-);
+  );
+  analyticsController.updateFromSnapshot(snapshot);
+});
 
 window.schedulerStateStore = schedulerStateStore;
 window.schedulerController = schedulerController;
