@@ -92,50 +92,70 @@
           <article class="panel algorithm-card">
             <header class="panel__header">[FCFS]</header>
             <div class="panel__body">
-              <p><strong>Definition:</strong> Executes processes in arrival order.</p>
-              <p><strong>Formula:</strong> WT = TAT - BT, TAT = CT - AT.</p>
-              <p><strong>Advantages:</strong> Simple, predictable, easy to implement.</p>
-              <p><strong>Disadvantages:</strong> Can cause convoy effect and poor average wait.</p>
+              <p>
+                First Come, First Served is a non-preemptive scheduling technique that places
+                processes in a FIFO ready queue.
+              </p>
+              <p>
+                The CPU executes each process until completion, strictly following its arrival
+                order before selecting the next process.
+              </p>
             </div>
           </article>
 
           <article class="panel algorithm-card">
             <header class="panel__header">[SJF]</header>
             <div class="panel__body">
-              <p><strong>Definition:</strong> Selects the arrived process with shortest burst time.</p>
-              <p><strong>Formula:</strong> Minimum BT among ready processes.</p>
-              <p><strong>Advantages:</strong> Often minimizes average waiting time.</p>
-              <p><strong>Disadvantages:</strong> Requires burst prediction and may starve long jobs.</p>
+              <p>
+                Shortest Job First is a non-preemptive technique that selects the ready process
+                with the smallest CPU burst time.
+              </p>
+              <p>
+                Once selected, the process runs to completion, and scheduling occurs again when
+                the CPU becomes available.
+              </p>
             </div>
           </article>
 
           <article class="panel algorithm-card">
             <header class="panel__header">[SRTF]</header>
             <div class="panel__body">
-              <p><strong>Definition:</strong> Preemptive SJF using shortest remaining time.</p>
-              <p><strong>Formula:</strong> Minimum remaining BT at each decision point.</p>
-              <p><strong>Advantages:</strong> Strong response for short processes.</p>
-              <p><strong>Disadvantages:</strong> More context switches and possible starvation.</p>
+              <p>
+                Shortest Remaining Time First is the preemptive form of SJF and always runs the
+                process with the least remaining burst time.
+              </p>
+              <p>
+                A newly arrived process preempts the running process when its required CPU time
+                is shorter than the current remaining time.
+              </p>
             </div>
           </article>
 
           <article class="panel algorithm-card">
             <header class="panel__header">[PRIORITY SCHEDULING]</header>
             <div class="panel__body">
-              <p><strong>Definition:</strong> Executes processes based on priority level.</p>
-              <p><strong>Formula:</strong> Select minimum priority value as highest priority.</p>
-              <p><strong>Advantages:</strong> Handles critical tasks before less important work.</p>
-              <p><strong>Disadvantages:</strong> Low-priority processes can starve without aging.</p>
+              <p>
+                Priority Scheduling assigns a priority value to every process and selects the
+                highest-priority process from the ready queue.
+              </p>
+              <p>
+                It may operate in preemptive or non-preemptive mode; this visualizer treats a
+                smaller priority number as a higher priority.
+              </p>
             </div>
           </article>
 
           <article class="panel algorithm-card">
             <header class="panel__header">[ROUND ROBIN]</header>
             <div class="panel__body">
-              <p><strong>Definition:</strong> Rotates ready processes using a fixed time quantum.</p>
-              <p><strong>Formula:</strong> Execute min(remaining BT, quantum).</p>
-              <p><strong>Advantages:</strong> Fair, responsive, useful for time-sharing systems.</p>
-              <p><strong>Disadvantages:</strong> Quantum choice strongly affects performance.</p>
+              <p>
+                Round Robin is a preemptive technique that cycles through the ready queue and
+                gives each process a fixed time quantum.
+              </p>
+              <p>
+                An unfinished process returns to the end of the queue, while completed processes
+                leave the scheduling cycle.
+              </p>
             </div>
           </article>
         </div>
